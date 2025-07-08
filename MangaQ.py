@@ -142,7 +142,7 @@ class FolderDialog(QDialog):
         # Right: Metadata Inputs
         metadata_input_layout = QVBoxLayout()
 
-        metadata_input_layout.addWidget(QLabel("Name:"))
+        metadata_input_layout.addWidget(QLabel("Title:"))
         self.name_input = QLineEdit(os.path.basename(self.folder_path))
         # Style QLineEdit for dark theme
         self.name_input.setStyleSheet("""
@@ -246,32 +246,34 @@ class FolderDialog(QDialog):
             )
             self.cover_label.setPixmap(scaled_pixmap)
             # Remove border and ensure background is transparent for the image itself
-            self.cover_label.setStyleSheet("border: none; background-color: transparent;") 
+            self.cover_label.setStyleSheet("border: none; background-color: transparent;")
             self.cover_label.setText("") # Clear "No Cover" text
 
             self.cover_overlay.setStyleSheet("background-color: rgba(0, 0, 0, 80);") # Darker overlay (e.g., 80/255 opacity)
             self.cover_overlay.show()
-            
-            # Change icon to 'edit.svg' when a cover is already selected
-            edit_icon_path = os.path.join(self._icons_path, "edit.svg")
-            if os.path.exists(edit_icon_path):
-                self.cover_button.setIcon(QIcon(edit_icon_path)) 
+
+            # --- START OF MODIFICATION ---
+            # Now always use add_circle.svg for the cover button when a cover is present
+            add_circle_icon_path = os.path.join(self._icons_path, "add_circle.svg")
+            if os.path.exists(add_circle_icon_path):
+                self.cover_button.setIcon(QIcon(add_circle_icon_path))
             else:
-                print(f"WARNING: edit.svg not found at {edit_icon_path}. Using add_circle.svg instead.")
-                self.cover_button.setIcon(QIcon(os.path.join(self._icons_path, "add_circle.svg")))
-            
-            self.cover_button.setIconSize(QSize(32,32)) 
+                print(f"ERROR: add_circle.svg not found at {add_circle_icon_path}. Cannot set icon for cover button.")
+                self.cover_button.setIcon(QIcon()) # Set empty icon if not found
+            # --- END OF MODIFICATION ---
+
+            self.cover_button.setIconSize(QSize(32,32))
             self.cover_button.setFixedSize(45, 45) # Maintain square size
             self.cover_button.setText("") # Ensure text is empty
         else:
             self.cover_label.clear() # Clear any previous pixmap
             self.cover_label.setText("No Cover")
             # Revert to dashed border and dark background when no cover
-            self.cover_label.setStyleSheet("border: 1px dashed gray; color: lightgray; background-color: transparent;") 
+            self.cover_label.setStyleSheet("border: 1px dashed gray; color: lightgray; background-color: transparent;")
 
             self.cover_overlay.setStyleSheet("background-color: rgba(0, 0, 0, 0);") # Transparent
             self.cover_overlay.hide()
-            
+
             # Restore add_circle icon when no cover
             add_circle_icon_path = os.path.join(self._icons_path, "add_circle.svg")
             if os.path.exists(add_circle_icon_path):
@@ -279,13 +281,13 @@ class FolderDialog(QDialog):
             else:
                 print(f"ERROR: add_circle.svg not found at {add_circle_icon_path}.")
                 self.cover_button.setIcon(QIcon()) # Set empty icon if not found
-            
+
             self.cover_button.setIconSize(QSize(32,32))
             self.cover_button.setFixedSize(45, 45)
             self.cover_button.setText("") # Ensure text is empty
         
         self._position_cover_elements() # Re-position after state change
-
+    
     def select_cover(self):
         file, _ = QFileDialog.getOpenFileName(self, "Select Cover", "", "Images (*.png *.webp *.jpg *.jpeg *.svg)") # Added SVG
         if file:
@@ -344,7 +346,7 @@ class InfoTabWidget(QWidget):
         main_layout.addLayout(app_header_layout) # Add the horizontal layout to the main vertical layout
 
         # Made by
-        self.made_by_label = QLabel("Made by Marios M")
+        self.made_by_label = QLabel("Made by MariosKGR")
         self.made_by_label.setAlignment(Qt.AlignCenter)
         self.made_by_label.setStyleSheet("font-size: 14px; color: gray; margin-top: 5px;")
         main_layout.addWidget(self.made_by_label)
@@ -925,6 +927,7 @@ class MangaReader(QWidget):
         if item:
             context_menu = QMenu(self)
 
+            # No explicit icon set here, so no change needed related to edit.svg
             edit_action = context_menu.addAction("Edit Manga")
             delete_action = context_menu.addAction("Delete Manga")
             open_folder_action = context_menu.addAction("Open Folder in Explorer")
