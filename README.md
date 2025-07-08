@@ -14,7 +14,15 @@ MangaQ is a user-friendly desktop application designed to help you organize and 
 -   **Cross-Platform:** Developed using PySide6, allowing potential use across various operating systems.
 
 ## Screenshots
-*(You can add links to your screenshots here, perhaps upload them to an image hosting service like Imgur and link them, or keep them in the repo and link relative paths).*
+### Main Library View
+<img src="screenshots/app_view.png" alt="MangaQ Main Library View" width="500">
+
+### Metadata Tab
+<img src="screenshots/metadata_view.png" alt="MangaQ Metadata View" width="500">
+
+### Adding Manga
+<img src="screenshots/adding_view.png" alt="MangaQ Adding Manga View" width="500">
+
 ## Installation & Setup
 1.  **Clone the repository:**
     ```bash
